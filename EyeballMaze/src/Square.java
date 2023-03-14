@@ -1,0 +1,11 @@
+public class Square {
+
+    public int col;
+    public int row;
+    public Color color;
+    public Shape shape;
+
+    public Square(int newRow, int newCol, int width, int height){
+    }
+
+}
