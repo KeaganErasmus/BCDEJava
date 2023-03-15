@@ -1,8 +1,11 @@
+import java.util.Arrays;
+
 public class Game implements ILevelHolder{
     private int levelWidth;
     private int levelHeight;
     private int levelCount;
-    public int[][] newLevel;
+    public int[] level;
+
 
     @Override
     public void addLevel(int height, int width) {
@@ -10,11 +13,7 @@ public class Game implements ILevelHolder{
         levelHeight = height;
         levelCount += 1;
 
-        for(int row = 0; row < levelHeight; row++){
-            for (int col = 0; col < levelWidth; col++){
-                newLevel[row][col] = row + col * width;
-            }
-        }
+        level = new int[this.levelCount];
     }
 
     @Override
@@ -29,10 +28,14 @@ public class Game implements ILevelHolder{
 
     @Override
     public void setLevel(int levelNumber) {
+        if(levelNumber > levelCount){
+           throw new IllegalArgumentException();
+        }
     }
 
     @Override
     public int getLevelCount() {
+        System.out.println(Arrays.toString(level));
         return levelCount;
     }
 }

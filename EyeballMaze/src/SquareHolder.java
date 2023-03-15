@@ -1,7 +1,11 @@
 public class SquareHolder implements ISquareHolder {
     @Override
     public void addSquare(Square square, int row, int column) {
-
+//           for(int row = 0; row < height; row++){
+//            for (int col = 0; col < width; col++){
+//                newLevel[row][col] = row + col * width;
+//            }
+//        }
     }
 
     @Override
