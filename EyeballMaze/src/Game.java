@@ -1,6 +1,6 @@
 import java.util.Arrays;
 
-public class Game implements ILevelHolder{
+public class Game implements ILevelHolder, IGoalHolder{
     private int levelWidth;
     private int levelHeight;
     private int levelCount;
@@ -37,5 +37,25 @@ public class Game implements ILevelHolder{
     public int getLevelCount() {
         System.out.println(Arrays.toString(level));
         return levelCount;
+    }
+
+    @Override
+    public void addGoal(int row, int column) {
+
+    }
+
+    @Override
+    public int getGoalCount() {
+        return 0;
+    }
+
+    @Override
+    public boolean hasGoalAt(int targetRow, int targetColumn) {
+        return false;
+    }
+
+    @Override
+    public int getCompletedGoalCount() {
+        return 0;
     }
 }
