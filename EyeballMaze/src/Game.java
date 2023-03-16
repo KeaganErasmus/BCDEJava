@@ -1,19 +1,20 @@
+import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Game implements ILevelHolder, IGoalHolder{
-    private int levelWidth;
+public class Game implements ILevelHolder {
+    Level levels = new Level();
+    public int levelWidth;
     private int levelHeight;
     private int levelCount;
-    public int[] level;
 
-
+    ArrayList<Level> level = new ArrayList<Level>();
     @Override
     public void addLevel(int height, int width) {
         levelWidth = width;
         levelHeight = height;
         levelCount += 1;
 
-        level = new int[this.levelCount];
+        levels.allMyLevels.add(level);
     }
 
     @Override
@@ -28,34 +29,20 @@ public class Game implements ILevelHolder, IGoalHolder{
 
     @Override
     public void setLevel(int levelNumber) {
-        if(levelNumber > levelCount){
+        // Throws an exception when you set a level that doesn't exist
+        if(levelNumber > level.size()){
            throw new IllegalArgumentException();
         }
     }
 
     @Override
     public int getLevelCount() {
-        System.out.println(Arrays.toString(level));
+//        System.out.println(Arrays.toString(levels));
         return levelCount;
     }
 
-    @Override
-    public void addGoal(int row, int column) {
+    /*
+    * GOAL
+    */
 
-    }
-
-    @Override
-    public int getGoalCount() {
-        return 0;
-    }
-
-    @Override
-    public boolean hasGoalAt(int targetRow, int targetColumn) {
-        return false;
-    }
-
-    @Override
-    public int getCompletedGoalCount() {
-        return 0;
-    }
 }

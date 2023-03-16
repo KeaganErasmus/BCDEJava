@@ -1,6 +1,8 @@
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
+import java.util.Arrays;
+
 
 class TestGameHoldsLevels {
     Game game = new Game();
@@ -59,6 +61,9 @@ class TestGameHoldsLevels {
     void testSettingLevelChangesCurrentLevelbyCheckingSize() {
         this.addTestLevel1();
         this.addTestLevel2();
+
+        System.out.println("should have 2 entries: " + game.levels);
+
         int[] expectedLevelSize = {1, 5};
         game.setLevel(0);
         int[] actualLevelSize = {game.getLevelHeight(), game.getLevelWidth()};
