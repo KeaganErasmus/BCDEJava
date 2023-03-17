@@ -62,7 +62,6 @@ class TestGameHoldsLevels {
         this.addTestLevel1();
         this.addTestLevel2();
 
-        System.out.println("should have 2 entries: " + game.levels);
 
         int[] expectedLevelSize = {1, 5};
         game.setLevel(0);

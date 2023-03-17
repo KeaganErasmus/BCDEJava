@@ -2,7 +2,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Game implements ILevelHolder {
-    Level levels = new Level();
     public int levelWidth;
     private int levelHeight;
     private int levelCount;
@@ -10,6 +9,7 @@ public class Game implements ILevelHolder {
     ArrayList<Level> level = new ArrayList<Level>();
     @Override
     public void addLevel(int height, int width) {
+        Level levels = new Level();
         levelWidth = width;
         levelHeight = height;
         levelCount += 1;
