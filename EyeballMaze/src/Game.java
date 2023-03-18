@@ -1,20 +1,26 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 
-public class Game implements ILevelHolder {
+public class Game implements ILevelHolder, IGoalHolder {
     public int levelWidth;
     private int levelHeight;
     private int levelCount;
+    public ArrayList<Level> allMyLevels = new ArrayList<Level>();
 
-    ArrayList<Level> level = new ArrayList<Level>();
+//    goal
+    private int goalCount;
+    private int goalRow;
+    private int goalCol;
+
+    public ArrayList<Goal> allMyGoals = new ArrayList<>();
+
     @Override
     public void addLevel(int height, int width) {
-        Level levels = new Level();
+        Level level = new Level();
         levelWidth = width;
         levelHeight = height;
         levelCount += 1;
 
-        levels.allMyLevels.add(level);
+        allMyLevels.add(level);
     }
 
     @Override
@@ -30,19 +36,49 @@ public class Game implements ILevelHolder {
     @Override
     public void setLevel(int levelNumber) {
         // Throws an exception when you set a level that doesn't exist
-        if(levelNumber > level.size()){
+        if(levelNumber > allMyLevels.size()){
            throw new IllegalArgumentException();
         }
     }
 
     @Override
     public int getLevelCount() {
-//        System.out.println(Arrays.toString(levels));
         return levelCount;
     }
 
     /*
-    * GOAL
-    */
+     * GOAL
+     */
 
+    @Override
+    public void addGoal(int row, int column) {
+        Goal goal = new Goal();
+        goalRow = row;
+        goalCol = column;
+
+        this.allMyGoals.add(goal);
+        goalCount++;
+
+        if(goalCol > levelWidth || goalRow > levelHeight){
+            throw new IllegalArgumentException();
+        }
+    }
+
+    @Override
+    public int getGoalCount() {
+        return goalCount;
+    }
+
+    @Override
+    public boolean hasGoalAt(int targetRow, int targetColumn) {
+        if(targetRow == goalRow && targetColumn == goalCol){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public int getCompletedGoalCount() {
+        return 0;
+    }
 }

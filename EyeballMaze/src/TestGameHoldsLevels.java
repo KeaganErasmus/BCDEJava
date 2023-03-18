@@ -6,7 +6,6 @@ import java.util.Arrays;
 
 class TestGameHoldsLevels {
     Game game = new Game();
-
     void addTestLevel1() {
         game.addLevel(1, 5);
     }
@@ -52,6 +51,8 @@ class TestGameHoldsLevels {
     void testMostRecentlyAddedLevelIsCurrentLevelbyCheckingSize() {
         this.addTestLevel1();
         this.addTestLevel2();
+
+        System.out.println(game.allMyLevels);
         int[] expectedLevelSize = {7, 3};
         int[] actualLevelSize = {game.getLevelHeight(), game.getLevelWidth()};
         assertArrayEquals(expectedLevelSize, actualLevelSize);
