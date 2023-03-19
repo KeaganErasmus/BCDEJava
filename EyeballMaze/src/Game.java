@@ -10,19 +10,14 @@ public class Game implements ILevelHolder, IGoalHolder {
     private int goalCount;
     public int goalRow;
     public int goalCol;
-
-    boolean[] hasGoals;
-
     public ArrayList<Goal> allMyGoals = new ArrayList<>();
 
     @Override
     public void addLevel(int height, int width) {
-        Level level = new Level();
         levelWidth = width;
         levelHeight = height;
-        levelCount += 1;
-
-        allMyLevels.add(level);
+        allMyLevels.add(new Level(levelWidth, levelHeight));
+        levelCount = this.allMyLevels.size();
     }
 
     @Override
