@@ -43,7 +43,7 @@ class TestLevelHoldsGoals {
         boolean[] expectedHasGoals = { true, true };
         boolean[] actualHasGoals = { game.hasGoalAt(4, 2), game.hasGoalAt(6, 1) };
 
-        System.out.println(game.allMyGoals);
+//        System.out.println(game.allMyGoals);
         System.out.println(Arrays.toString(actualHasGoals));
         assertArrayEquals(expectedHasGoals, actualHasGoals);
     }

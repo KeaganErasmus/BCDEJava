@@ -4,12 +4,14 @@ public class Game implements ILevelHolder, IGoalHolder {
     public int levelWidth;
     private int levelHeight;
     private int levelCount;
-    public ArrayList<Level> allMyLevels = new ArrayList<Level>();
+    public ArrayList<Level> allMyLevels = new ArrayList<>();
 
 //    goal
     private int goalCount;
     private int goalRow;
     private int goalCol;
+
+    boolean[] hasGoals;
 
     public ArrayList<Goal> allMyGoals = new ArrayList<>();
 
@@ -52,12 +54,12 @@ public class Game implements ILevelHolder, IGoalHolder {
 
     @Override
     public void addGoal(int row, int column) {
-        Goal goal = new Goal();
         goalRow = row;
         goalCol = column;
 
-        this.allMyGoals.add(goal);
-        goalCount++;
+        Goal goal = new Goal(goalRow, goalCol);
+        this.allMyGoals.add(new Goal(goalRow, goalCol));
+        goalCount = this.allMyGoals.size();
 
         if(goalCol > levelWidth || goalRow > levelHeight){
             throw new IllegalArgumentException();
@@ -71,8 +73,10 @@ public class Game implements ILevelHolder, IGoalHolder {
 
     @Override
     public boolean hasGoalAt(int targetRow, int targetColumn) {
-        if(targetRow == goalRow && targetColumn == goalCol){
-            return true;
+        for (Goal goalEl : allMyGoals) {
+            if (targetRow == goalEl.row && targetColumn == goalEl.col) {
+                return true;
+            }
         }
         return false;
     }
