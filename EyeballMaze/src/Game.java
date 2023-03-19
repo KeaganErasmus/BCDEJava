@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Game implements ILevelHolder, IGoalHolder {
+public class Game implements ILevelHolder, IGoalHolder,ISquareHolder {
     public int levelWidth;
     private int levelHeight;
     private int levelCount;
@@ -79,5 +79,44 @@ public class Game implements ILevelHolder, IGoalHolder {
     @Override
     public int getCompletedGoalCount() {
         return 0;
+    }
+
+    /*
+     * Squares
+     */
+    public int squareRow;
+    public int squareCol;
+    public Color color;
+    public Shape shape;
+    public Square square;
+
+    public ArrayList<Square> allMySquares = new ArrayList<>();
+
+    @Override
+    public void addSquare(Square square, int row, int column) {
+        squareRow = row;
+        squareCol = column;
+        shape = getShapeAt(squareRow, squareCol);
+
+        BlankSquare();
+
+        this.allMySquares.add(new Square(squareRow, squareCol, color, shape));
+    }
+
+    @Override
+    public Color getColorAt(int row, int column) {
+        return null;
+    }
+
+    @Override
+    public Shape getShapeAt(int row, int column) {
+        if(row == squareRow && column == squareCol){
+            return shape;
+        }
+        return null;
+    }
+
+    public Shape BlankSquare(){
+        return Shape.BLANK;
     }
 }
