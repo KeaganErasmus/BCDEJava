@@ -8,8 +8,8 @@ public class Game implements ILevelHolder, IGoalHolder {
 
 //    goal
     private int goalCount;
-    private int goalRow;
-    private int goalCol;
+    public int goalRow;
+    public int goalCol;
 
     boolean[] hasGoals;
 
