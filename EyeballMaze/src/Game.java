@@ -20,6 +20,7 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder {
 
         allMyLevels.add(new Level(levelWidth, levelHeight));
         levelCount = this.allMyLevels.size();
+        this.setLevel(levelCount - 1);
     }
 
     @Override
@@ -107,7 +108,7 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder {
 
         this.currentLevel.allMySquares.add(theSquare);
 
-        if(squareRow > levelHeight || squareCol > levelWidth){
+        if(squareRow > levelHeight || squareCol > levelWidth || squareRow < 0 || squareCol < 0){
             throw new IllegalArgumentException();
         }
     }

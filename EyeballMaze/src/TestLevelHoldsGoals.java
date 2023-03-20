@@ -10,7 +10,6 @@ class TestLevelHoldsGoals {
     void add7High3WideLevel() throws Exception {
         game = new Game();
         game.addLevel(7, 3);
-        game.setLevel(0);
     }
     @Test
     void testAddingOneGoalIncreasesGoalCountTo1() {
