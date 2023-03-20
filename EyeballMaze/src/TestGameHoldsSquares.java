@@ -5,6 +5,7 @@ class TestGameHoldsSquares {
     private void setup() {
         game = new Game();
         game.addLevel(9, 1);
+        game.setLevel(0);
         game.addSquare(new BlankSquare(), 0, 0);
         game.addSquare(new BlankSquare(), 1, 0);
         game.addSquare(new PlayableSquare(Color.BLUE, Shape.DIAMOND), 2, 0);

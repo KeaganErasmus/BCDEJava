@@ -57,11 +57,10 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder {
         goalRow = row;
         goalCol = column;
 
-        Goal goal = new Goal(goalRow, goalCol);
-        this.currentLevel.allMyGoals.add(goal);
+        currentLevel.allMyGoals.add(new Goal(goalRow, goalCol));
         goalCount = this.currentLevel.allMyGoals.size();
 
-        if(goalCol > this.currentLevel.width || goalRow > this.currentLevel.height){
+        if(goalCol > this.currentLevel.width || goalRow > this.currentLevel.height || goalCol < 0 || goalRow < 0){
             throw new IllegalArgumentException();
         }
     }
@@ -73,8 +72,9 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder {
 
     @Override
     public boolean hasGoalAt(int targetRow, int targetColumn) {
-        for (Goal goalEl : this.currentLevel.allMyGoals) {
-            if (targetRow == goalEl.row && targetColumn == goalEl.col) {
+        for (Goal goals : this.currentLevel.allMyGoals) {
+            if (targetRow == goals.row && targetColumn == goals.col) {
+                System.out.println(this.currentLevel.allMyGoals);
                 return true;
             }
         }
@@ -115,8 +115,8 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder {
     @Override
     public Color getColorAt(int row, int column) {
         for(Square squares : this.currentLevel.allMySquares){
-            if(theSquare.row == row && theSquare.col == column){
-                return color;
+            if(squareRow == row && squareCol == column){
+                return this.color;
             }
         }
         return null;
@@ -127,7 +127,6 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder {
         if(row == theSquare.row && column == theSquare.col){
             return shape;
         }
-//        System.out.println(allMySquares);
         return null;
     }
 }
