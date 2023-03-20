@@ -62,8 +62,6 @@ class TestGameHoldsLevels {
     void testSettingLevelChangesCurrentLevelbyCheckingSize() {
         this.addTestLevel1();
         this.addTestLevel2();
-
-
         int[] expectedLevelSize = {1, 5};
         game.setLevel(0);
         int[] actualLevelSize = {game.getLevelHeight(), game.getLevelWidth()};

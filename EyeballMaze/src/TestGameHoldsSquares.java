@@ -49,4 +49,4 @@ class TestGameHoldsSquares {
                 game.getShapeAt(5, 0), game.getShapeAt(7, 0), game.getShapeAt(6, 0) };
         assertArrayEquals(expectedShapes, actualShapes);
     }
-} 
+}
