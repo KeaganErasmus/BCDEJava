@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class Game implements ILevelHolder, IGoalHolder,ISquareHolder {
+public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHolder {
     public int levelWidth;
     private int levelHeight;
     private int levelCount;
@@ -90,8 +90,6 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder {
     /*
      * Squares
      */
-    public Color color;
-    public Shape shape;
     public Square theSquare;
 
     @Override
@@ -125,6 +123,26 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder {
                 return squares.shape;
             }
         }
+        return null;
+    }
+
+    @Override
+    public void addEyeball(int row, int column, Direction direction) {
+
+    }
+
+    @Override
+    public int getEyeballRow() {
+        return 0;
+    }
+
+    @Override
+    public int getEyeballColumn() {
+        return 0;
+    }
+
+    @Override
+    public Direction getEyeballDirection() {
         return null;
     }
 }
