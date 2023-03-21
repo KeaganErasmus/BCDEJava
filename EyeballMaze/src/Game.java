@@ -90,23 +90,20 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder {
     /*
      * Squares
      */
-    public int squareRow;
-    public int squareCol;
     public Color color;
     public Shape shape;
     public Square theSquare;
 
     @Override
     public void addSquare(Square square, int row, int column) {
-        squareRow = row;
-        squareCol = column;
         theSquare = square;
 
-        theSquare.row = squareRow;
-        theSquare.col = squareCol;
+        theSquare.row = row;
+        theSquare.col = column;
+
         this.currentLevel.allMySquares.add(theSquare);
 
-        if(squareRow > levelHeight || squareCol > levelWidth || squareRow < 0 || squareCol < 0){
+        if(row > levelHeight || column > levelWidth || row < 0 || column < 0){
             throw new IllegalArgumentException();
         }
     }
@@ -115,7 +112,7 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder {
     public Color getColorAt(int row, int column) {
         for(Square squares : this.currentLevel.allMySquares){
             if(row == squares.getRow() && column == squares.getCol()){
-                return color;
+                return squares.color;
             }
         }
         return null;
@@ -125,7 +122,7 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder {
     public Shape getShapeAt(int row, int column) {
         for (Square squares : this.currentLevel.allMySquares){
             if(row == squares.getRow() && column == squares.getCol()){
-                return shape;
+                return squares.shape;
             }
         }
         return null;

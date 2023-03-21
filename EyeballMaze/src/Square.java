@@ -10,8 +10,4 @@ public class Square {
     public int getCol(){
         return this.col;
     }
-
-    public Color getColor(){
-        return this.color;
-    }
 }
