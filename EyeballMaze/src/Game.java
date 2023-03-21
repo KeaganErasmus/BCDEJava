@@ -18,8 +18,8 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder {
         levelWidth = width;
         levelHeight = height;
 
-        allMyLevels.add(new Level(levelWidth, levelHeight));
-        levelCount = this.allMyLevels.size();
+        this.allMyLevels.add(new Level(levelWidth, levelHeight));
+        this.levelCount++;
         this.setLevel(levelCount - 1);
     }
 
@@ -55,8 +55,8 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder {
 
     @Override
     public void addGoal(int row, int column) {
-        goalRow = row;
-        goalCol = column;
+        this.goalRow = row;
+        this.goalCol = column;
 
         currentLevel.allMyGoals.add(new Goal(goalRow, goalCol));
         goalCount = this.currentLevel.allMyGoals.size();
@@ -104,8 +104,6 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder {
 
         theSquare.row = squareRow;
         theSquare.col = squareCol;
-
-
         this.currentLevel.allMySquares.add(theSquare);
 
         if(squareRow > levelHeight || squareCol > levelWidth || squareRow < 0 || squareCol < 0){
@@ -116,8 +114,8 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder {
     @Override
     public Color getColorAt(int row, int column) {
         for(Square squares : this.currentLevel.allMySquares){
-            if(squareRow == row && squareCol == column){
-                return this.color;
+            if(row == squares.getRow() && column == squares.getCol()){
+                return color;
             }
         }
         return null;
@@ -125,8 +123,10 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder {
 
     @Override
     public Shape getShapeAt(int row, int column) {
-        if(row == theSquare.row && column == theSquare.col){
-            return shape;
+        for (Square squares : this.currentLevel.allMySquares){
+            if(row == squares.getRow() && column == squares.getCol()){
+                return shape;
+            }
         }
         return null;
     }
