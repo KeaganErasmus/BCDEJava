@@ -129,27 +129,38 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
     /*
     *  Eyeball
     */
-    public int eyeballRow;
-    public int eyeballCol;
+    protected int eyeballRow;
+    protected int eyeballCol;
+    protected Direction eyeballDirection;
+    protected  Eyeball eyeball;
 
     @Override
     public void addEyeball(int row, int column, Direction direction) {
         eyeballRow = row;
         eyeballCol = column;
+        eyeballDirection = direction;
+
+        eyeball = new Eyeball(eyeballRow,eyeballCol,eyeballDirection);
+
+        this.currentLevel.allMyEyes.add(eyeball);
+
+        if(eyeball.row > this.currentLevel.height || eyeball.col > this.currentLevel.width || eyeball.row < 0 || eyeball.col < 0){
+            throw new IllegalArgumentException("Eyeball placed outside level scope");
+        }
     }
 
     @Override
     public int getEyeballRow() {
-        return eyeballRow;
+        return eyeball.row;
     }
 
     @Override
     public int getEyeballColumn() {
-        return eyeballCol;
+        return eyeball.col;
     }
 
     @Override
     public Direction getEyeballDirection() {
-        return null;
+        return eyeball.direction;
     }
 }
