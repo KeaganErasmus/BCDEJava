@@ -126,19 +126,26 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
         return null;
     }
 
+    /*
+    *  Eyeball
+    */
+    public int eyeballRow;
+    public int eyeballCol;
+
     @Override
     public void addEyeball(int row, int column, Direction direction) {
-
+        eyeballRow = row;
+        eyeballCol = column;
     }
 
     @Override
     public int getEyeballRow() {
-        return 0;
+        return eyeballRow;
     }
 
     @Override
     public int getEyeballColumn() {
-        return 0;
+        return eyeballCol;
     }
 
     @Override
