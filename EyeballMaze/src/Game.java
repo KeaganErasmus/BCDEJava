@@ -163,4 +163,39 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
     public Direction getEyeballDirection() {
         return eyeball.direction;
     }
+
+    /*
+    * Movement
+    */
+
+    public boolean canMoveTo(int row, int col){
+        theSquare.row = row;
+        theSquare.col = col;
+
+        return true;
+    }
+
+    public Message MessageIfMovingTo(int row, int col){
+        return null;
+    }
+
+    public Boolean isDirectionOK(int row, int col){
+        return true;
+    }
+
+    public Message checkDirectionMessage(int row, int col){
+        return null;
+    }
+
+    public boolean hasBlankFreePathTo(int row, int col){
+        return true;
+    }
+
+    public Message checkMessageForBlankOnPathTo(int row, int col){
+        return null;
+    }
+
+    public void moveTo(int row, int col){
+
+    }
 }
