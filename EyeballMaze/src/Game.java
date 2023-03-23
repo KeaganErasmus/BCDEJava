@@ -136,11 +136,11 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
 
     @Override
     public void addEyeball(int row, int column, Direction direction) {
-        eyeballRow = row;
-        eyeballCol = column;
-        eyeballDirection = direction;
+        this.eyeballRow = row;
+        this.eyeballCol = column;
+        this.eyeballDirection = direction;
 
-        eyeball = new Eyeball(eyeballRow,eyeballCol,eyeballDirection);
+        this.eyeball = new Eyeball(eyeballRow,eyeballCol,eyeballDirection);
 
         this.currentLevel.allMyEyes.add(eyeball);
 
@@ -169,10 +169,17 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
     */
 
     public boolean canMoveTo(int row, int col){
-        theSquare.row = row;
-        theSquare.col = col;
-
-        return true;
+        Color nextColor = getColorAt(row, col);
+        Shape nextShape = getShapeAt(row, col);
+        for (Square square: this.currentLevel.allMySquares) {
+            if(square.getRow() == row && square.getCol() == col && square.color == nextColor || square.shape == nextShape){
+                return true;
+            }
+            else {
+                break;
+            }
+        }
+        return false;
     }
 
     public Message MessageIfMovingTo(int row, int col){
