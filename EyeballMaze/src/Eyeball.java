@@ -1,7 +1,6 @@
 public class Eyeball {
     public int row;
     public int col;
-
     public Color color;
     public Shape shape;
     public Direction direction;
@@ -17,6 +16,13 @@ public class Eyeball {
     }
     public Shape getShape(){
         return this.shape;
+    }
+
+    public int getRow(){
+        return this.row;
+    }
+    public int getCol(){
+        return this.col;
     }
 
 }

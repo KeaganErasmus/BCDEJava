@@ -171,9 +171,12 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
     public boolean canMoveTo(int row, int col){
         Color nextColor = getColorAt(row, col);
         Shape nextShape = getShapeAt(row, col);
+
+//        int eyeCol = eyeball.getCol();
+//        int eyeRow = eyeball.getRow();
+
         for (Square square: this.currentLevel.allMySquares) {
-            if(square.getRow() == row && square.getCol() == col && square.color == nextColor || square.shape == nextShape){
-                return true;
+            if(square.getRow() == eyeball.getRow() && square.getCol() == eyeball.getCol()){
             }
             else {
                 break;
