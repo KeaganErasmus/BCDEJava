@@ -161,7 +161,7 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
 
     @Override
     public Direction getEyeballDirection() {
-        return eyeball.direction;
+        return this.eyeball.direction;
     }
 
     /*
@@ -176,10 +176,10 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
 //        int eyeRow = eyeball.getRow();
 
         for (Square square: this.currentLevel.allMySquares) {
-            if(square.getRow() == eyeball.getRow() && square.getCol() == eyeball.getCol()){
-            }
-            else {
-                break;
+            if(square.color == nextColor || square.shape == nextShape){
+                return true;
+            }else {
+                return false;
             }
         }
         return false;
