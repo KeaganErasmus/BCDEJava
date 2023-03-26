@@ -171,13 +171,14 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
     public boolean canMoveTo(int row, int col){
         Color nextColor = getColorAt(row, col);
         Shape nextShape = getShapeAt(row, col);
-
-//        int eyeCol = eyeball.getCol();
-//        int eyeRow = eyeball.getRow();
+        Direction currentDir = getEyeballDirection();
 
         for (Square square: this.currentLevel.allMySquares) {
             if(square.color == nextColor || square.shape == nextShape){
-                return true;
+                System.out.println(currentDir);
+                if(currentDir == Direction.UP){
+                    return true;
+                }
             }else {
                 return false;
             }
@@ -186,6 +187,16 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
     }
 
     public Message MessageIfMovingTo(int row, int col){
+        Color nextColor = getColorAt(row, col);
+        Shape nextShape = getShapeAt(row, col);
+
+        for (Square square: this.currentLevel.allMySquares) {
+            if(square.color == nextColor || square.shape == nextShape){
+                return Message.OK;
+            }else {
+                return Message.DIFFERENT_SHAPE_OR_COLOR;
+            }
+        }
         return null;
     }
 
@@ -206,6 +217,11 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
     }
 
     public void moveTo(int row, int col){
-
+        int eyeRow = eyeball.getRow();
+        int eyeCol = eyeball.getCol();
+        System.out.println(eyeRow + " " + eyeCol);
+        eyeRow = row;
+        eyeCol = col;
+        System.out.println(eyeRow + " " + eyeCol);
     }
 }
