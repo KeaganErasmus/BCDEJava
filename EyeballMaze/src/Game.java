@@ -168,7 +168,7 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
     * Movement
     */
 
-    public boolean canMoveTo(int row, int col){
+    public boolean validMovement(int row, int col){
         Color nextColor = getColorAt(row, col);
         Shape nextShape = getShapeAt(row, col);
         Direction currentDir = getEyeballDirection();
@@ -186,18 +186,15 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
         return false;
     }
 
-    public Message MessageIfMovingTo(int row, int col){
-        Color nextColor = getColorAt(row, col);
-        Shape nextShape = getShapeAt(row, col);
+    public boolean canMoveTo(int row, int col){
+        return validMovement(row, col);
+    }
 
-        for (Square square: this.currentLevel.allMySquares) {
-            if(square.color == nextColor || square.shape == nextShape){
-                return Message.OK;
-            }else {
-                return Message.DIFFERENT_SHAPE_OR_COLOR;
-            }
+    public Message MessageIfMovingTo(int row, int col){
+        if(validMovement(row, col)){
+            return Message.OK;
         }
-        return null;
+        return Message.DIFFERENT_SHAPE_OR_COLOR;
     }
 
     public Boolean isDirectionOK(int row, int col){
