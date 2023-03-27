@@ -1,17 +1,23 @@
 import java.util.ArrayList;
 
 public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHolder {
-    public int levelWidth;
-    private int levelHeight;
-    private int levelCount;
+    protected int levelWidth;
+    protected int levelHeight;
+    protected int levelCount;
 
-    public Level currentLevel;
+    protected Level currentLevel;
     public ArrayList<Level> allMyLevels = new ArrayList<>();
 
 //    goal
-    private int goalCount;
-    public int goalRow;
-    public int goalCol;
+    protected int goalCount;
+    protected int goalRow;
+    protected int goalCol;
+
+// Eyeball
+    protected int eyeballRow;
+    protected int eyeballCol;
+    protected Direction eyeballDirection;
+    protected  Eyeball eyeball;
 
     @Override
     public void addLevel(int height, int width) {
@@ -129,11 +135,6 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
     /*
     *  Eyeball
     */
-    protected int eyeballRow;
-    protected int eyeballCol;
-    protected Direction eyeballDirection;
-    protected  Eyeball eyeball;
-
     @Override
     public void addEyeball(int row, int column, Direction direction) {
         this.eyeballRow = row;
@@ -171,19 +172,17 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
     public boolean validMovement(int row, int col){
         Color nextColor = getColorAt(row, col);
         Shape nextShape = getShapeAt(row, col);
-        Direction currentDir = getEyeballDirection();
-
         for (Square square: this.currentLevel.allMySquares) {
-            if(square.color == nextColor || square.shape == nextShape){
-                System.out.println(currentDir);
-                if(currentDir == Direction.UP){
-                    return true;
-                }
-            }else {
-                return false;
-            }
+            return (square.color == nextColor || square.shape == nextShape);
         }
         return false;
+    }
+
+    public boolean legalMove(int row, int col){
+        if (eyeball.direction == Direction.DOWN){
+            return false;
+        }
+        return true;
     }
 
     public boolean canMoveTo(int row, int col){
@@ -198,27 +197,49 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
     }
 
     public Boolean isDirectionOK(int row, int col){
-        return true;
+        if(legalMove(row, col)){
+         return validMovement(row,col);
+        }
+        return false;
     }
 
     public Message checkDirectionMessage(int row, int col){
-        return null;
+        if(validMovement(row, col)){
+            switch (eyeball.direction){
+                case UP, LEFT, RIGHT -> {
+                    return Message.OK;
+                }
+                case DOWN -> {
+                    return Message.BACKWARDS_MOVE;
+                }
+            }
+        }
+        return Message.MOVING_DIAGONALLY;
     }
 
     public boolean hasBlankFreePathTo(int row, int col){
-        return true;
+        if (validMovement(row, col)){
+            return theSquare.color == Color.BLANK;
+        }
+        return false;
     }
 
     public Message checkMessageForBlankOnPathTo(int row, int col){
+        if(validMovement(row, col)){
+            if(theSquare.color == Color.BLANK){
+                return Message.MOVING_OVER_BLANK;
+            }
+        }
         return null;
     }
 
     public void moveTo(int row, int col){
-        int eyeRow = eyeball.getRow();
-        int eyeCol = eyeball.getCol();
-        System.out.println(eyeRow + " " + eyeCol);
-        eyeRow = row;
-        eyeCol = col;
-        System.out.println(eyeRow + " " + eyeCol);
+        if(validMovement(row, col) && legalMove(row,col)){
+            if (eyeball.getRow() > row){
+                eyeball.direction = Direction.UP;
+            }
+            eyeball.row = row;
+            eyeball.col = col;
+        }
     }
 }
