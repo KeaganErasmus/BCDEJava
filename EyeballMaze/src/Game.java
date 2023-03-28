@@ -186,7 +186,6 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
                 return Direction.LEFT;
             }
         }
-
         if(eyeball.col == col){
             if(eyeball.row < row){
                 return Direction.DOWN;
@@ -229,10 +228,7 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
     }
 
     public boolean canMoveTo(int row, int col){
-        if(isDirectionOK(row, col) && validMovement(row, col)) {
-            return true;
-        }
-        return false;
+        return isDirectionOK(row, col) && validMovement(row, col);
     }
 
     public Message MessageIfMovingTo(int row, int col){
