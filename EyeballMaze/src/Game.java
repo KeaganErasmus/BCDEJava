@@ -168,6 +168,7 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
     /*
     * Movement
     */
+
     public boolean validMovement(int row, int col){
         Color nextColor = getColorAt(row, col);
         Shape nextShape = getShapeAt(row, col);
@@ -176,6 +177,7 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
         }
         return false;
     }
+
     public Direction destDirection(int row, int col){
         if(eyeball.row == row){
             if(eyeball.col < col){
@@ -184,6 +186,7 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
                 return Direction.LEFT;
             }
         }
+
         if(eyeball.col == col){
             if(eyeball.row < row){
                 return Direction.DOWN;
@@ -197,34 +200,39 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
         Direction destDirection = destDirection(row, col);
         switch (destDirection){
             case UP -> {
-                if(eyeball.direction  == Direction.DOWN){
+                if(eyeball.direction == Direction.DOWN){
                     return Message.BACKWARDS_MOVE;
                 }
             }
             case DOWN -> {
-                if(eyeball.direction  == Direction.UP){
+                if(eyeball.direction == Direction.UP){
                     return Message.BACKWARDS_MOVE;
                 }
             }
             case LEFT -> {
-                if(eyeball.direction  == Direction.LEFT){
+                if(eyeball.direction == Direction.RIGHT){
                     return Message.BACKWARDS_MOVE;
                 }
             }
             case RIGHT -> {
-                if(eyeball.direction  == Direction.RIGHT){
+                if(eyeball.direction == Direction.LEFT){
                     return Message.BACKWARDS_MOVE;
                 }
             }
             case null -> {
-                return Message.MOVING_DIAGONALLY;
+                if(eyeball.direction == Direction.LEFT){
+                    return Message.MOVING_DIAGONALLY;
+                }
             }
         }
         return Message.OK;
     }
 
     public boolean canMoveTo(int row, int col){
-        return validMovement(row, col) && isDirectionOK(row, col);
+        if(isDirectionOK(row, col) && validMovement(row, col)) {
+            return true;
+        }
+        return false;
     }
 
     public Message MessageIfMovingTo(int row, int col){
@@ -235,8 +243,8 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
     }
 
     public Boolean isDirectionOK(int row, int col){
-        if (legalMove(row, col) == Message.OK){
-            return validMovement(row, col);
+        if(legalMove(row, col) == Message.OK){
+            return validMovement(row,col);
         }
         return false;
     }
@@ -254,6 +262,7 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
         }
         return Message.MOVING_DIAGONALLY;
     }
+
     public boolean hasBlankFreePathTo(int row, int col){
         if (validMovement(row, col)){
             return theSquare.color == Color.BLANK;
