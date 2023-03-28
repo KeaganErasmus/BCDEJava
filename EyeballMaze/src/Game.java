@@ -219,9 +219,7 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
                 }
             }
             case null -> {
-                if(eyeball.direction == Direction.LEFT){
                     return Message.MOVING_DIAGONALLY;
-                }
             }
         }
         return Message.OK;
@@ -239,10 +237,7 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
     }
 
     public Boolean isDirectionOK(int row, int col){
-        if(legalMove(row, col) == Message.OK){
-            return validMovement(row,col);
-        }
-        return false;
+        return legalMove(row, col) == Message.OK;
     }
 
     public Message checkDirectionMessage(int row, int col){
@@ -261,7 +256,7 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
                 return Message.MOVING_OVER_BLANK;
             }
         }
-        return null;
+        return Message.OK;
     }
     public void moveTo(int row, int col){
         if(canMoveTo(row, col)){
