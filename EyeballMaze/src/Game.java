@@ -165,17 +165,24 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
         return this.eyeball.direction;
     }
 
+    public Color getEyeballColor(Eyeball eyeball){
+        return getColorAt(eyeball.row, eyeball.col);
+    }
+    public Shape getEyeballShape(Eyeball eyeball){
+        return getShapeAt(eyeball.row, eyeball.col);
+    }
+
     /*
     * Movement
     */
-
     public boolean validMovement(int row, int col){
         Color nextColor = getColorAt(row, col);
         Shape nextShape = getShapeAt(row, col);
-        for (Square square: this.currentLevel.allMySquares) {
-            return (square.color == nextColor || square.shape == nextShape);
-        }
-        return false;
+
+        Color eyeballColor = getEyeballColor(eyeball);
+        Shape eyeBallShape  = getEyeballShape(eyeball);
+
+        return (eyeballColor == nextColor || eyeBallShape == nextShape);
     }
 
     public Direction destDirection(int row, int col){
