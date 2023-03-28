@@ -52,3 +52,111 @@ class TestCompletingGoals {
             }
         }
     }
+    private void setUpLevelOne() {
+        game = new Game();
+        levelDataHandler = new LevelDataHandler(game);
+        levelDataHandler.createLevel(6, 4);
+        levelDataHandler.setUpLevel(levelOneInitData);
+        game.addGoal(0, 2);
+        game.addEyeball(5, 1, Direction.UP);
+    }
+    @Test
+    void testCompletingLevelOne() {
+        setUpLevelOne();
+        for (Position p : levelOneSolution) {
+            game.moveTo(p.getRow(), p.getColumn());
+        }
+        int expectedCompletedGoalCount = 1;
+        int actualGoalCount = game.getCompletedGoalCount();
+        assertEquals(expectedCompletedGoalCount, actualGoalCount);
+    }
+    private void add10High1WideLevel() {
+        game = new Game();
+        game.addLevel(10, 1);
+        game.addSquare(new PlayableSquare(Color.YELLOW, Shape.STAR), 4, 0);
+        game.addSquare(new PlayableSquare(Color.RED, Shape.CROSS), 5, 0);
+        game.addSquare(new PlayableSquare(Color.GREEN, Shape.STAR), 6, 0);
+        game.addSquare(new PlayableSquare(Color.BLUE, Shape.DIAMOND), 7, 0);
+        game.addSquare(new PlayableSquare(Color.GREEN, Shape.FLOWER), 8, 0);
+        game.addEyeball(4, 0, Direction.LEFT);
+        game.addGoal(6, 0);
+    }
+    @Test
+    void testOkToMoveToAGoalWithSameColorOrShape() {
+        add10High1WideLevel();
+        assertTrue(game.canMoveTo(6, 0));
+    }
+    @Test
+    void testNoErrorMessageWhenMovingToAGoalWithSameColorOrShape() {
+        add10High1WideLevel();
+        Message expected = Message.OK;
+        Message actual = game.MessageIfMovingTo(6, 0);
+        assertEquals(expected, actual);
+    }
+    @Test
+    void testNotOkToMoveToAGoalWithDifferentColorOrShape() {
+        add10High1WideLevel();
+        game.addGoal(8, 0);
+        assertFalse(game.canMoveTo(8, 0));
+    }
+    @Test
+    void testGetsErrorMessageWhenMovingToAGoalWithDifferentColorOrShape() {
+        add10High1WideLevel();
+        Message expected = Message.DIFFERENT_SHAPE_OR_COLOR;
+        game.addGoal(8, 0);
+        Message actual = game.MessageIfMovingTo(8, 0);
+    }
+    @Test
+    void testNotOkToMoveToAGoalAtADiagonalSquare() {
+        setUpLevelOne();
+        game.addGoal(2, 3);
+        assertFalse(game.canMoveTo(2, 3));
+    }
+    @Test
+    void testNotOkWhenMovingBackwardsToAGoalWithSameColorOrShape() {
+        setUpLevelOne();
+        game.addGoal(3, 0);
+        game.moveTo(3, 1);
+        game.moveTo(3, 3);
+        assertFalse(game.canMoveTo(3, 0));
+    }
+    @Test
+    void testCompleting1GoalIncreasesCompletedGoalCountBy1() {
+        add10High1WideLevel();
+        int expectedCompletedGoalCount = game.getCompletedGoalCount() + 1;
+        game.moveTo(6, 0);
+        int actualCompletedGoalCount = game.getCompletedGoalCount();
+        assertEquals(expectedCompletedGoalCount, actualCompletedGoalCount);
+    }
+    @Test
+    void testCompleting1GoalDecreaseGoalCountBy1() {
+        add10High1WideLevel();
+        int expectedGoalCount = game.getGoalCount() - 1;
+        game.moveTo(6, 0);
+        int actualGoalCount = game.getGoalCount();
+        assertEquals(expectedGoalCount, actualGoalCount);
+    }
+    @Test
+    void testGoalWillBeRemovedFromSquareAfterCompletingTheGoal() {
+        add10High1WideLevel();
+        game.moveTo(6, 0);
+        assertFalse(game.hasGoalAt(6, 0));
+    }
+    @Test
+    void testGoalSquareWillNotBeChangedWhenEyeballMovesOntoIt() {
+        add10High1WideLevel();
+        String[] expected = { "GREEN", "STAR" };
+        game.moveTo(6, 0);
+        String[] actual = { game.getColorAt(6, 0).name(), game.getShapeAt(6, 0).name() };
+        assertArrayEquals(expected, actual);
+    }
+    @Test
+    void testGoalSquareBecomesBlankSquareAfterEyeballMovesToAnotherSquare() {
+        add10High1WideLevel();
+        game.moveTo(6, 0);
+        game.moveTo(8, 0);
+        String[] expected = { "BLANK", "BLANK" };
+        String[] actual = { game.getColorAt(6, 0).name(), game.getShapeAt(6, 0).name() };
+        assertArrayEquals(expected, actual);
+    }
+}
