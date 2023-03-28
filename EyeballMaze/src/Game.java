@@ -178,10 +178,32 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
         return false;
     }
 
-    public boolean legalMove(int row, int col){
-        switch (eyeballDirection){
-            case UP -> {
+    public Direction destDirection(int row, int col){
+        if(eyeball.row == row){
+            if(eyeball.col < col){
+                return Direction.RIGHT;
+            } else if (eyeball.col > col) {
+                return Direction.LEFT;
+            }
+        }
 
+        if(eyeball.col == col){
+            if(eyeball.row < row){
+                return Direction.DOWN;
+            } else if (eyeball.row > row) {
+                return Direction.UP;
+            }
+        }
+        return null;
+    }
+    public boolean legalMove(int row, int col){
+        Direction destDirection = destDirection(row, col);
+        switch (destDirection){
+            case UP -> {
+                if(row > eyeball.row){
+                    eyeball.direction = Direction.UP;
+                    return true;
+                }
             }
         }
         return false;
@@ -233,10 +255,7 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
         return null;
     }
     public void moveTo(int row, int col){
-        if(validMovement(row, col)){
-//            if (row < eyeball.getRow()){
-//                eyeball.direction = Direction.UP;
-//            }
+        if(canMoveTo(row, col)){
 
             eyeball.row = row;
             eyeball.col = col;
