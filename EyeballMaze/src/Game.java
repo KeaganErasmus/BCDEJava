@@ -1,6 +1,8 @@
 import java.util.ArrayList;
 
 public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHolder {
+
+//    Level
     protected int levelWidth;
     protected int levelHeight;
     protected int levelCount;
@@ -13,11 +15,16 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
     protected int goalRow;
     protected int goalCol;
 
+//    Square
+    protected Square theSquare;
+
+
 // Eyeball
     protected int eyeballRow;
     protected int eyeballCol;
     protected Direction eyeballDirection;
     protected  Eyeball eyeball;
+
 
     @Override
     public void addLevel(int height, int width) {
@@ -96,8 +103,6 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
     /*
      * Squares
      */
-    public Square theSquare;
-
     @Override
     public void addSquare(Square square, int row, int column) {
         theSquare = square;
