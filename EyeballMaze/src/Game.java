@@ -250,17 +250,7 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
     }
 
     public Message checkDirectionMessage(int row, int col){
-        if(validMovement(row, col)){
-            switch (eyeball.direction){
-                case UP, LEFT, RIGHT -> {
-                    return Message.OK;
-                }
-                case DOWN -> {
-                    return Message.BACKWARDS_MOVE;
-                }
-            }
-        }
-        return Message.MOVING_DIAGONALLY;
+        return legalMove(row, col);
     }
 
     public boolean hasBlankFreePathTo(int row, int col){
