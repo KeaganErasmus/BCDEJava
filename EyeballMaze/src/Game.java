@@ -179,10 +179,12 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
     }
 
     public boolean legalMove(int row, int col){
-        if (eyeball.direction == Direction.DOWN){
-            return false;
+        switch (eyeballDirection){
+            case UP -> {
+
+            }
         }
-        return true;
+        return false;
     }
 
     public boolean canMoveTo(int row, int col){
@@ -216,28 +218,26 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
         }
         return Message.MOVING_DIAGONALLY;
     }
-
     public boolean hasBlankFreePathTo(int row, int col){
         if (validMovement(row, col)){
             return theSquare.color == Color.BLANK;
         }
         return false;
     }
-
     public Message checkMessageForBlankOnPathTo(int row, int col){
         if(validMovement(row, col)){
-            if(theSquare.color == Color.BLANK){
+            if(theSquare.color != Color.BLANK){
                 return Message.MOVING_OVER_BLANK;
             }
         }
         return null;
     }
-
     public void moveTo(int row, int col){
-        if(validMovement(row, col) && legalMove(row,col)){
-            if (eyeball.getRow() > row){
-                eyeball.direction = Direction.UP;
-            }
+        if(validMovement(row, col)){
+//            if (row < eyeball.getRow()){
+//                eyeball.direction = Direction.UP;
+//            }
+
             eyeball.row = row;
             eyeball.col = col;
         }
