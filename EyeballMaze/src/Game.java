@@ -14,6 +14,8 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
     protected int goalCount;
     protected int goalRow;
     protected int goalCol;
+    protected int numGoalsComplete = 0;
+    protected boolean goalComplete;
 
 //    Square
     protected Square theSquare;
@@ -72,7 +74,6 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
         this.goalCol = column;
 
         currentLevel.allMyGoals.add(new Goal(goalRow, goalCol));
-        goalCount = this.currentLevel.allMyGoals.size();
 
         if(goalCol > this.currentLevel.width || goalRow > this.currentLevel.height || goalCol < 0 || goalRow < 0){
             throw new IllegalArgumentException();
@@ -81,14 +82,13 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
 
     @Override
     public int getGoalCount() {
-        return goalCount;
+        return this.currentLevel.allMyGoals.size();
     }
 
     @Override
     public boolean hasGoalAt(int targetRow, int targetColumn) {
         for (Goal goals : this.currentLevel.allMyGoals) {
             if (targetRow == goals.row && targetColumn == goals.col) {
-                System.out.println(this.currentLevel.allMyGoals);
                 return true;
             }
         }
@@ -97,7 +97,7 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
 
     @Override
     public int getCompletedGoalCount() {
-        return 0;
+        return numGoalsComplete;
     }
 
     /*
@@ -271,10 +271,37 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
         return Message.OK;
     }
     public void moveTo(int row, int col){
+        int prevEyeballRow = eyeball.row;
+        int prevEyeballCol = eyeball.col;
         if(canMoveTo(row, col)){
             eyeball.direction = destDirection(row, col);
             eyeball.row = row;
             eyeball.col = col;
+            this.checkIfGoalComplete(row, col);
         }
+
+        if(this.goalComplete){
+            for(Square square: this.currentLevel.allMySquares){
+                if(square.row == prevEyeballRow && square.col == prevEyeballCol){
+                    square.shape = Shape.BLANK;
+                    square.color = Color.BLANK;
+                }
+            }
+        }
+    }
+
+    public void checkIfGoalComplete(int row, int col){
+        for (Goal goal: this.currentLevel.allMyGoals) {
+            if(goal.row == row && goal.col == col){
+                this.completedGoal();
+                this.currentLevel.allMyGoals.remove(goal);
+                return;
+            }
+        }
+    }
+
+    public void completedGoal(){
+        this.numGoalsComplete++;
+        this.goalComplete = true;
     }
 }

@@ -1,8 +1,6 @@
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
-import javax.swing.text.Position;
-
 class TestCompletingGoals {
     Game game;
     LevelDataHandler levelDataHandler;
