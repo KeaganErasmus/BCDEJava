@@ -11,7 +11,6 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
     public ArrayList<Level> allMyLevels = new ArrayList<>();
 
 //    goal
-    protected int goalCount;
     protected int goalRow;
     protected int goalCol;
     protected int numGoalsComplete = 0;
@@ -19,7 +18,6 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
 
 //    Square
     protected Square theSquare;
-
 
 // Eyeball
     protected int eyeballRow;
