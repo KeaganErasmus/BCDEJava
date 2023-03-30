@@ -257,16 +257,45 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
     }
 
     public boolean hasBlankFreePathTo(int row, int col){
-        if (validMovement(row, col)){
-            return theSquare.color == Color.BLANK;
+        Direction destDirection = destDirection(row, col);
+        switch (destDirection){
+            case UP -> {
+                for (int i = this.getEyeballRow(); i >= row; i--){
+                    if(this.getColorAt(i, col) == Color.BLANK || this.getShapeAt(i, col) == Shape.BLANK){
+                        return false;
+                    }
+                }
+            }
+            case DOWN -> {
+                for (int i = this.getEyeballRow(); i <= row; i++){
+                    if(this.getColorAt(i, col) == Color.BLANK || this.getShapeAt(i, col) == Shape.BLANK){
+                        return false;
+                    }
+                }
+            }
+            case LEFT -> {
+                for (int i = this.getEyeballColumn(); i >= col; i--){
+                    if(this.getColorAt(row, i) == Color.BLANK || this.getShapeAt(row, i) == Shape.BLANK){
+                        return false;
+                    }
+                }
+            }
+            case RIGHT -> {
+                for (int i = this.getEyeballColumn(); i <= col; i++){
+                    if(this.getColorAt(row, i) == Color.BLANK || this.getShapeAt(row, i) == Shape.BLANK){
+                        return false;
+                    }
+                }
+            }
+            case null -> {
+                return false;
+            }
         }
-        return false;
+        return true;
     }
     public Message checkMessageForBlankOnPathTo(int row, int col){
-        if(validMovement(row, col)){
-            if(theSquare.color != Color.BLANK){
-                return Message.MOVING_OVER_BLANK;
-            }
+        if(!hasBlankFreePathTo(row, col)){
+            return Message.MOVING_OVER_BLANK;
         }
         return Message.OK;
     }
