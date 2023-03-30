@@ -47,10 +47,10 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
     }
 
     @Override
-    public void setLevel(int levelNumber) {
+    public void setLevel(int levelNumber) throws IllegalArgumentException {
         // Throws an exception when you set a level that doesn't exist
         if(levelNumber > levelCount){
-           throw new IllegalArgumentException();
+           throw new IllegalArgumentException("That level does not exist.");
         }
         else {
             currentLevel = this.allMyLevels.get(levelNumber);
@@ -67,14 +67,14 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
      */
 
     @Override
-    public void addGoal(int row, int column) {
+    public void addGoal(int row, int column) throws IllegalArgumentException {
         this.goalRow = row;
         this.goalCol = column;
 
         currentLevel.allMyGoals.add(new Goal(goalRow, goalCol));
 
         if(goalCol > this.currentLevel.width || goalRow > this.currentLevel.height || goalCol < 0 || goalRow < 0){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Can not add Goal outside level bounds");
         }
     }
 
@@ -102,7 +102,7 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
      * Squares
      */
     @Override
-    public void addSquare(Square square, int row, int column) {
+    public void addSquare(Square square, int row, int column) throws IllegalArgumentException {
         theSquare = square;
 
         theSquare.row = row;
@@ -111,7 +111,7 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
         this.currentLevel.allMySquares.add(theSquare);
 
         if(row > levelHeight || column > levelWidth || row < 0 || column < 0){
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("Can not add Square outside level bounds");
         }
     }
 
@@ -139,7 +139,7 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
     *  Eyeball
     */
     @Override
-    public void addEyeball(int row, int column, Direction direction) {
+    public void addEyeball(int row, int column, Direction direction) throws IllegalArgumentException {
         this.eyeballRow = row;
         this.eyeballCol = column;
         this.eyeballDirection = direction;
@@ -149,7 +149,7 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
         this.currentLevel.allMyEyes.add(eyeball);
 
         if(eyeball.row > this.currentLevel.height || eyeball.col > this.currentLevel.width || eyeball.row < 0 || eyeball.col < 0){
-            throw new IllegalArgumentException("Eyeball placed outside level scope");
+            throw new IllegalArgumentException("Can not place Eyeball outside level bounds");
         }
     }
 
