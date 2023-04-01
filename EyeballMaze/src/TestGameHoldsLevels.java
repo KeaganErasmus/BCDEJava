@@ -52,7 +52,6 @@ class TestGameHoldsLevels {
         this.addTestLevel1();
         this.addTestLevel2();
 
-        System.out.println(game.allMyLevels);
         int[] expectedLevelSize = {7, 3};
         int[] actualLevelSize = {game.getLevelHeight(), game.getLevelWidth()};
         assertArrayEquals(expectedLevelSize, actualLevelSize);

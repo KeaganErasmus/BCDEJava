@@ -5,7 +5,7 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
 //    Level
     protected int levelWidth;
     protected int levelHeight;
-    protected int levelCount;
+    protected int levelCount = 0;
 
     protected Level currentLevel;
     public ArrayList<Level> allMyLevels = new ArrayList<>();
@@ -38,17 +38,16 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
 
     @Override
     public int getLevelWidth() {
-        return levelWidth;
+        return this.currentLevel.width;
     }
 
     @Override
     public int getLevelHeight() {
-        return levelHeight;
+        return this.currentLevel.height;
     }
 
     @Override
     public void setLevel(int levelNumber) throws IllegalArgumentException {
-        // Throws an exception when you set a level that doesn't exist
         if(levelNumber > levelCount){
            throw new IllegalArgumentException("That level does not exist.");
         }
@@ -207,29 +206,30 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
     }
     public Message legalMove(int row, int col){
         Direction destDirection = destDirection(row, col);
-        switch (destDirection){
-            case UP -> {
-                if(eyeball.direction == Direction.DOWN){
-                    return Message.BACKWARDS_MOVE;
+        if(destDirection == null){
+            return Message.MOVING_DIAGONALLY;
+        }else {
+            switch (destDirection) {
+                case UP -> {
+                    if (eyeball.direction == Direction.DOWN) {
+                        return Message.BACKWARDS_MOVE;
+                    }
                 }
-            }
-            case DOWN -> {
-                if(eyeball.direction == Direction.UP){
-                    return Message.BACKWARDS_MOVE;
+                case DOWN -> {
+                    if (eyeball.direction == Direction.UP) {
+                        return Message.BACKWARDS_MOVE;
+                    }
                 }
-            }
-            case LEFT -> {
-                if(eyeball.direction == Direction.RIGHT){
-                    return Message.BACKWARDS_MOVE;
+                case LEFT -> {
+                    if (eyeball.direction == Direction.RIGHT) {
+                        return Message.BACKWARDS_MOVE;
+                    }
                 }
-            }
-            case RIGHT -> {
-                if(eyeball.direction == Direction.LEFT){
-                    return Message.BACKWARDS_MOVE;
+                case RIGHT -> {
+                    if (eyeball.direction == Direction.LEFT) {
+                        return Message.BACKWARDS_MOVE;
+                    }
                 }
-            }
-            case null -> {
-                    return Message.MOVING_DIAGONALLY;
             }
         }
         return Message.OK;
@@ -256,37 +256,38 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
 
     public boolean hasBlankFreePathTo(int row, int col){
         Direction destDirection = destDirection(row, col);
-        switch (destDirection){
-            case UP -> {
-                for (int i = this.getEyeballRow(); i >= row; i--){
-                    if(this.getColorAt(i, col) == Color.BLANK || this.getShapeAt(i, col) == Shape.BLANK){
-                        return false;
+        if(destDirection == null){
+            return false;
+        }else {
+            switch (destDirection) {
+                case UP -> {
+                    for (int i = this.getEyeballRow(); i >= row; i--) {
+                        if (this.getColorAt(i, col) == Color.BLANK || this.getShapeAt(i, col) == Shape.BLANK) {
+                            return false;
+                        }
                     }
                 }
-            }
-            case DOWN -> {
-                for (int i = this.getEyeballRow(); i <= row; i++){
-                    if(this.getColorAt(i, col) == Color.BLANK || this.getShapeAt(i, col) == Shape.BLANK){
-                        return false;
+                case DOWN -> {
+                    for (int i = this.getEyeballRow(); i <= row; i++) {
+                        if (this.getColorAt(i, col) == Color.BLANK || this.getShapeAt(i, col) == Shape.BLANK) {
+                            return false;
+                        }
                     }
                 }
-            }
-            case LEFT -> {
-                for (int i = this.getEyeballColumn(); i >= col; i--){
-                    if(this.getColorAt(row, i) == Color.BLANK || this.getShapeAt(row, i) == Shape.BLANK){
-                        return false;
+                case LEFT -> {
+                    for (int i = this.getEyeballColumn(); i >= col; i--) {
+                        if (this.getColorAt(row, i) == Color.BLANK || this.getShapeAt(row, i) == Shape.BLANK) {
+                            return false;
+                        }
                     }
                 }
-            }
-            case RIGHT -> {
-                for (int i = this.getEyeballColumn(); i <= col; i++){
-                    if(this.getColorAt(row, i) == Color.BLANK || this.getShapeAt(row, i) == Shape.BLANK){
-                        return false;
+                case RIGHT -> {
+                    for (int i = this.getEyeballColumn(); i <= col; i++) {
+                        if (this.getColorAt(row, i) == Color.BLANK || this.getShapeAt(row, i) == Shape.BLANK) {
+                            return false;
+                        }
                     }
                 }
-            }
-            case null -> {
-                return false;
             }
         }
         return true;
@@ -297,6 +298,7 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
         }
         return Message.OK;
     }
+
     public void moveTo(int row, int col){
         int prevEyeballRow = eyeball.row;
         int prevEyeballCol = eyeball.col;
