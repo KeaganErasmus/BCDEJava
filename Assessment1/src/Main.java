@@ -59,6 +59,11 @@ public class Main {
         System.out.println("Inheritance demo:");
         System.out.println(myCar.getBrand());
         System.out.println(myCar.getModel());
+        System.out.println();
+
+        Manufacturer<String> manufacturer = new Manufacturer<>();
+        manufacturer.addName("Bozo");
+        System.out.println(manufacturer.getName());
 
     }
 }
