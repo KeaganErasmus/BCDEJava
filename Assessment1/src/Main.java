@@ -14,6 +14,10 @@ public class Main {
         hyundia.showCarModels();
         nissan.showCarModels();
 
+        Car myCar = new Car();
+        myCar.brand = "Suzuki";
+        myCar.model = "Swift sport";
+
         List<String> cars = Arrays.asList("Volvo", "Nissan", "Mazda");
 
         Collections.sort(cars, (a, b) -> a.compareTo(b));
@@ -50,6 +54,11 @@ public class Main {
         for (String v:newAllMyVehicles) {
             System.out.println(v);
         }
+        System.out.println();
+
+        System.out.println("Inheritance demo:");
+        System.out.println(myCar.getBrand());
+        System.out.println(myCar.getModel());
 
     }
 }
