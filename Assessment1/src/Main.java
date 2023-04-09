@@ -6,6 +6,15 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
+        CarMake volkswagen = new CarMake(Make.VOLKSWAGEN);
+        CarMake mazda = new CarMake(Make.MAZDA);
+        CarMake hyundia = new CarMake(Make.HYUNDIA);
+        CarMake nissan = new CarMake(Make.NISSAN);
+
+        volkswagen.showCarModels();
+        mazda.showCarModels();
+        hyundia.showCarModels();
+        nissan.showCarModels();
 
         List<String> cars = Arrays.asList("Volvo", "Nissan", "Mazda");
 
