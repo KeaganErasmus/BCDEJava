@@ -4,6 +4,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) {
+        System.out.println("Enum types");
         CarMake volkswagen = new CarMake(Make.VOLKSWAGEN);
         CarMake mazda = new CarMake(Make.MAZDA);
         CarMake hyundia = new CarMake(Make.HYUNDIA);
@@ -46,8 +47,8 @@ public class Main {
 
         System.out.println();
 
-        int i;
-        for(i = 0; i < allMyVehicles.length; i++){
+        System.out.println("List");
+        for(int i = 0; i < allMyVehicles.length; i++){
             newAllMyVehicles[i] = allMyVehicles[i];
         }
 
@@ -56,13 +57,16 @@ public class Main {
         }
         System.out.println();
 
+        //Inheritance
         System.out.println("Inheritance demo:");
         System.out.println(myCar.getBrand());
         System.out.println(myCar.getModel());
         System.out.println();
 
+        //Generics
+        System.out.println("Generics demo");
         Manufacturer<String> manufacturer = new Manufacturer<>();
-        manufacturer.addName("Bozo");
+        manufacturer.addName("Bongo");
         System.out.println(manufacturer.getName());
 
     }
