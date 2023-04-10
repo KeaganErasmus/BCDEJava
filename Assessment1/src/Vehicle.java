@@ -1,4 +1,4 @@
-public class Vehicle implements IVehicle{
+public sealed class Vehicle implements IVehicle permits Toyota {
 
     public String brand;
     public String model;

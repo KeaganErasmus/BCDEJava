@@ -1,9 +1,13 @@
+import javax.imageio.plugins.jpeg.JPEGHuffmanTable;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         System.out.println("Enum types");
         CarMake volkswagen = new CarMake(Make.VOLKSWAGEN);
         CarMake mazda = new CarMake(Make.MAZDA);
@@ -81,5 +85,32 @@ public class Main {
         sb.append(" ");
         sb.append(myCar.getBrand());
         System.out.println(sb);
+
+        System.out.println();
+
+        // Using a literal string
+        String originalMessg = "this is a normal text example\n" +
+                "where I can have to do more formatting to get new lines\n";
+
+        // Using a text block
+        String message = """
+               this is a text block example
+               where I can have a long string of text on new lines
+               """;
+
+        System.out.println(originalMessg);
+        System.out.println(message);
+
+        //File input stream
+        try{
+            FileInputStream inputStream = new FileInputStream("C:/Programming/Java/BCDEJava/Assessment1/src/cars.txt");
+            int data;
+            while ((data = inputStream.read()) != -1){
+                System.out.println((char)data);
+            }
+            inputStream.close();
+        }catch (IOException e){
+            e.printStackTrace();
+        }
     }
 }
