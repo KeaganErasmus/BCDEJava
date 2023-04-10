@@ -15,9 +15,7 @@ public class Main {
         hyundia.showCarModels();
         nissan.showCarModels();
 
-        Car myCar = new Car();
-        myCar.brand = "Suzuki";
-        myCar.model = "Swift sport";
+        Toyota myCar = new Toyota("Toyota");
 
         List<String> cars = Arrays.asList("Volvo", "Nissan", "Mazda");
 
@@ -45,8 +43,6 @@ public class Main {
         String[] allMyVehicles = {golf.getBrand(), tricycle.getBrand()};
         String[] newAllMyVehicles = new String[allMyVehicles.length + 1];
 
-        System.out.println();
-
         System.out.println("List");
         for(int i = 0; i < allMyVehicles.length; i++){
             newAllMyVehicles[i] = allMyVehicles[i];
@@ -60,7 +56,6 @@ public class Main {
         //Inheritance
         System.out.println("Inheritance demo:");
         System.out.println(myCar.getBrand());
-        System.out.println(myCar.getModel());
         System.out.println();
 
         //Generics
@@ -69,5 +64,22 @@ public class Main {
         manufacturer.addName("Bongo");
         System.out.println(manufacturer.getName());
 
+        System.out.println();
+
+        //AutoBoxing and Unboxing
+        System.out.println("Autoboxing example");
+        Integer numWheels = 6;
+        int i = numWheels; // Unboxing
+        System.out.println(i);
+
+        System.out.println();
+
+        //StringBuilder
+        System.out.println("StringBuilder demo");
+        StringBuilder sb = new StringBuilder();
+        sb.append(volkswagen.make);
+        sb.append(" ");
+        sb.append(myCar.getBrand());
+        System.out.println(sb);
     }
 }

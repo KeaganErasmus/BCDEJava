@@ -29,6 +29,10 @@ public class Vehicle implements IVehicle{
     @Override
     public void getNumWheels(){
         System.out.println("Number of wheels: " + numWheels);
+
+        if(numWheels < 0){
+            throw new IllegalArgumentException("A car can not have less than zero wheels");
+        }
     }
 
     @Override
