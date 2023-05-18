@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">EyeBall</string>
+    <string name="textview">TextView</string>
+    <string name="img1">donut</string>
+    <string name="img2">start</string>
+    <string name="img3">stop</string>
+    <string name="img4">donutt</string>
+    <string name="img5">donutttt</string>
 </resources>
