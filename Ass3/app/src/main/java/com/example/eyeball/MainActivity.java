@@ -41,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
         imageSrcs[2] = R.drawable.b_star;
         imageSrcs[3] = R.drawable.r_star;
         imageSrcs[4] = R.drawable.goal;
+
+        setLevelName("Level 1");
     }
 
     private void setPlayerInMaze(int location){
@@ -108,5 +110,10 @@ public class MainActivity extends AppCompatActivity {
     private void setGoalCount(){
         TextView text=(TextView)findViewById(R.id.goalCount);
         text.setText(String.valueOf(goal));
+    }
+
+    private void setLevelName(String levelName){
+        TextView text = (TextView) findViewById(R.id.LevelName);
+        text.setText(levelName);
     }
 }
