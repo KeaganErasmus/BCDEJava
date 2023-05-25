@@ -2,11 +2,14 @@ package com.example.eyeball;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -20,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     final Maze maze = new Maze();
     final ImageView[] imageViews = new ImageView[5];
+    final int[] eyeBallImages = new int[4];
     final int[] imageSrcs = new int[5];
 
 //    Goal
@@ -42,12 +46,18 @@ public class MainActivity extends AppCompatActivity {
         imageSrcs[3] = R.drawable.r_star;
         imageSrcs[4] = R.drawable.goal;
 
+        // Load eyeball images
+        eyeBallImages[0] = R.drawable.eyes_up;
+        eyeBallImages[1] = R.drawable.eyes_down;
+        eyeBallImages[2] = R.drawable.eyes_left;
+        eyeBallImages[3] = R.drawable.eyes_right;
+
         setLevelName("Level 1");
     }
 
     private void setPlayerInMaze(int location){
         Bitmap image1 = BitmapFactory.decodeResource(getResources(), imageSrcs[location]);
-        Bitmap image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyes_up);
+        Bitmap image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyes_right);
         Bitmap mergedImages = createSingleImageFromMultipleImages(image1, image2);
         imageViews[location].setImageBitmap(mergedImages);
     }
@@ -115,5 +125,19 @@ public class MainActivity extends AppCompatActivity {
     private void setLevelName(String levelName){
         TextView text = (TextView) findViewById(R.id.LevelName);
         text.setText(levelName);
+    }
+
+    public void restartClicked(View view) {
+        if (Build.VERSION.SDK_INT >= 11) {
+            recreate();
+        } else {
+            Intent intent = getIntent();
+            intent.addFlags(Intent.FLAG_ACTIVITY_NO_ANIMATION);
+            finish();
+            overridePendingTransition(0, 0);
+
+            startActivity(intent);
+            overridePendingTransition(0, 0);
+        }
     }
 }
