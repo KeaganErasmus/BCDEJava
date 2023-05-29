@@ -1,34 +1,62 @@
 package com.example.eyeball;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.widget.GridLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import androidx.appcompat.app.AppCompatActivity;
+import com.example.eyeball.model.*;
 
 public class MainActivity extends AppCompatActivity {
+
+    //Level
+    private int levelWidth = 5;
+    private int levelHeight = 5;
+
+    private static final int NUM_ROWS = 5;
+    private static final int NUM_COLUMNS = 5;
+    protected Level currentLevel;
+
 //    Goal
     public int goalCount = 0;
 
+    @SuppressLint({"DefaultLocale", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        GridLayout levelGrid = findViewById(R.id.LevelGrid);
+
+        levelGrid.setRowCount(NUM_ROWS);
+        levelGrid.setColumnCount(NUM_COLUMNS);
+
+        // create the grid
+        for (int row = 0; row < NUM_ROWS; row++) {
+            for (int col = 0; col < NUM_COLUMNS; col++) {
+                Button button = new Button(this);
+                button.setLayoutParams(new GridLayout.LayoutParams(
+                        GridLayout.spec(row, GridLayout.FILL, 1f),
+                        GridLayout.spec(col, GridLayout.FILL, 1f)));
+                button.setText("yeeeet");
+                levelGrid.addView(button);
+            }
+        }
+
         setLevelName("Level 1");
+    }
+
+    public int getLevelWidth() {
+        return this.currentLevel.width;
+    }
+
+    public int getLevelHeight() {
+        return this.currentLevel.height;
     }
 
     private int addGoalCount(){
