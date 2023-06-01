@@ -1,125 +1,81 @@
 package com.example.eyeball;
 
-import androidx.appcompat.app.AppCompatActivity;
-
+import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Canvas;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageButton;
-import android.widget.ImageView;
+import android.widget.GridLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
+import androidx.appcompat.app.AppCompatActivity;
+import com.example.eyeball.model.*;
 
 public class MainActivity extends AppCompatActivity {
 
-    final Maze maze = new Maze();
-    final ImageView[] imageViews = new ImageView[5];
-    final int[] eyeBallImages = new int[4];
-    final int[] imageSrcs = new int[5];
+    //Level
+    private int levelWidth = 5;
+    private int levelHeight = 5;
+
+    androidx.gridlayout.widget.GridLayout levelGrid;
+
+    private static final int NUM_ROWS = 4;
+    private static final int NUM_COLUMNS = 4;
+    protected Level currentLevel;
 
 //    Goal
-    public int goal = 0;
+    public int goalCount = 0;
 
+    @SuppressLint({"DefaultLocale", "SetTextI18n"})
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        imageViews[0] = findViewById(R.id.imageView1);
-        imageViews[1] = findViewById(R.id.imageView2);
-        imageViews[2] = findViewById(R.id.imageView3);
-        imageViews[3] = findViewById(R.id.imageView4);
-        imageViews[4] = findViewById(R.id.imageView5);
+        levelGrid = findViewById(R.id.LevelGrid);
 
-        imageSrcs[0] = R.drawable.b_cross;
-        imageSrcs[1] = R.drawable.r_flower;
-        imageSrcs[2] = R.drawable.b_star;
-        imageSrcs[3] = R.drawable.r_star;
-        imageSrcs[4] = R.drawable.goal;
+        levelGrid.setRowCount(NUM_ROWS);
+        levelGrid.setColumnCount(NUM_COLUMNS);
 
-        // Load eyeball images
-        eyeBallImages[0] = R.drawable.eyes_up;
-        eyeBallImages[1] = R.drawable.eyes_down;
-        eyeBallImages[2] = R.drawable.eyes_left;
-        eyeBallImages[3] = R.drawable.eyes_right;
+//      create the grid
+        for (int row = 0; row < NUM_ROWS; row++) {
+            for (int col = 0; col < NUM_COLUMNS; col++) {
+                Button button = new Button(this);
+                button.setLayoutParams(new GridLayout.LayoutParams(
+                        GridLayout.spec(row, GridLayout.FILL, 1f),
+                        GridLayout.spec(col, GridLayout.FILL, 1f)));
+                button.setOnClickListener(toastListener);
+                button.setText("yeeeet");
+                levelGrid.addView(button);
+            }
+        }
 
         setLevelName("Level 1");
     }
 
-    private void setPlayerInMaze(int location){
-        Bitmap image1 = BitmapFactory.decodeResource(getResources(), imageSrcs[location]);
-        Bitmap image2 = BitmapFactory.decodeResource(getResources(), R.drawable.eyes_right);
-        Bitmap mergedImages = createSingleImageFromMultipleImages(image1, image2);
-        imageViews[location].setImageBitmap(mergedImages);
-    }
-    public void onClickToStart(View view) {
-        ImageButton imageButton = (ImageButton) view;
-        imageButton.setImageResource(android.R.color.transparent);
+    private final View.OnClickListener toastListener = v -> toast();
 
-        int currentLocationPlayer = maze.getPlayerPos();
-        setPlayerInMaze(currentLocationPlayer);
+    private void toast(){
+        Toast.makeText(this, "ya yeet", Toast.LENGTH_SHORT).show();
     }
 
-    private int getLocationImageView(ImageView imageView) {
-        String name = getResources().getResourceEntryName(imageView.getId());
-        name = name.replace("imageView", "");
-        return Integer.parseInt(name) - 1;
+    public int getLevelWidth() {
+        return this.currentLevel.width;
     }
 
-    public void onClickToMove(View view) {
-        ImageView nextImageView = (ImageView) view;
-
-        if (!isMoveable(maze.getPlayerPos(), getLocationImageView(nextImageView)))
-            return;
-
-        imageViews[maze.getPlayerPos()].setImageBitmap(BitmapFactory.decodeResource(getResources(), imageSrcs[maze.getPlayerPos()]));
-        maze.setPlayerPos(getLocationImageView(nextImageView));
-
-        int currentLocationPlayer = maze.getPlayerPos();
-        setPlayerInMaze(currentLocationPlayer);
-
-        if(currentLocationPlayer == 4){
-            addGoal();
-            setGoalCount();
-            Toast.makeText(this, "You Win!", Toast.LENGTH_SHORT).show();
-        }
+    public int getLevelHeight() {
+        return this.currentLevel.height;
     }
 
-    private Bitmap createSingleImageFromMultipleImages(Bitmap firstImage, Bitmap secondImage) {
-        Bitmap result = Bitmap.createBitmap(secondImage.getWidth(), secondImage.getHeight(), secondImage.getConfig());
-        Canvas canvas = new Canvas(result);
-        canvas.drawBitmap(firstImage, 10f, 10f, null);
-        canvas.drawBitmap(secondImage, 10, 10, null);
-        return result;
-    }
-
-    private boolean isMoveable(int currentLocationPlayer, int destination) {
-        Set<String> current = new HashSet<>(Arrays.asList(maze.getMaze()[currentLocationPlayer].split("")));
-        Set<String> des = new HashSet<>(Arrays.asList(maze.getMaze()[destination].split("")));
-        current.remove("");
-        des.remove("");
-
-        current.retainAll(des);
-
-        return !current.isEmpty();
-    }
-
-    private void addGoal(){
-        goal += 1;
+    private int addGoalCount(){
+        return goalCount += 1;
     }
 
     private void setGoalCount(){
         TextView text=(TextView)findViewById(R.id.goalCount);
-        text.setText(String.valueOf(goal));
+        text.setText(String.valueOf(goalCount));
     }
 
     private void setLevelName(String levelName){
