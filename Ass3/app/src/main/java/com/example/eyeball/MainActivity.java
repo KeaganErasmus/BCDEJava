@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
     int moveCount = 0;
 
     CountDownTimer timer;
-    long timeLeft = 30000; // 30 second timer
+    long timeLeft;
     boolean timerRunning;
     Button timerButton;
 
@@ -158,9 +158,13 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    private long getTimerTime(long time){
+        return timeLeft = time;
+    }
+
     @SuppressLint("SetTextI18n")
     public void startTimer() {
-        timer = new CountDownTimer(timeLeft, 1000) {
+        timer = new CountDownTimer(getTimerTime(30000), 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 timeLeft = millisUntilFinished;
