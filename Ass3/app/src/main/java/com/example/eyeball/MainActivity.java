@@ -138,7 +138,7 @@ public class MainActivity extends AppCompatActivity {
 
                 button.setOnClickListener(view -> {
                     int[] position = (int[]) view.getTag();
-                    onClickHandle(position[0], position[1]);
+                    onClickMove(position[0], position[1]);
                 });
 
                 images = new FrameLayout(this);
@@ -159,6 +159,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private long getTimerTime(long time){
+        // gets time in miliseconds
         return timeLeft = time;
     }
 
@@ -245,6 +246,7 @@ public class MainActivity extends AppCompatActivity {
     private void setLevelName(String levelName){
         TextView levelText = findViewById(R.id.LevelName);
         levelText.setText(levelName);
+
     }
 
     public void restartClicked(View view) {
@@ -263,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @SuppressLint("SetTextI18n")
-    public void onClickHandle(int row, int col) {
+    public void onClickMove(int row, int col) {
         helpText = findViewById(R.id.help_text);
         goalCount = findViewById(R.id.goalCountText);
 
