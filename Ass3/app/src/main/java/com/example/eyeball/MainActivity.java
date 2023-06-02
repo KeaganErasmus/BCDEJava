@@ -2,32 +2,57 @@ package com.example.eyeball;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.view.View;
 import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.GridLayout;
 import android.widget.ImageView;
+import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
-import com.example.eyeball.model.*;
+
+import com.example.eyeball.model.Color;
+import com.example.eyeball.model.Direction;
+import com.example.eyeball.model.Game;
+import com.example.eyeball.model.PlayableSquare;
+import com.example.eyeball.model.Shape;
+import com.example.eyeball.model.Square;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
     Game game = new Game();
     GridLayout levelGrid;
-    FrameLayout frameLayout;
+    FrameLayout images;
 
     TextView goalCount;
     TextView goalText;
+    TextView moveText;
+    TextView timerText;
+    TextView helpText;
 
-    private String levelName;
+    MediaPlayer moveSound;
+    MediaPlayer winSound;
+    MediaPlayer lostSound;
+    MediaPlayer wrongMoveSound;
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
+    Switch soundSwitch;
+    boolean playSound;
 
+    int moveCount = 0;
 
+    CountDownTimer timer;
+    long timeLeft = 30000; // 30 second timer
+    boolean timerRunning;
+    Button timerButton;
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,8 +61,34 @@ public class MainActivity extends AppCompatActivity {
         // Play the game
         startGame();
         goalText = findViewById(R.id.goalCountText);
-        goalText.setText("Number of goals complete:  " + (game.getCompletedGoalCount()) + "/" + (game.getGoalCount()));
+        goalText.setText("Number of goals complete:  "
+                + game.getCompletedGoalCount() + "/" + game.getGoalCount());
+        moveText = findViewById(R.id.moveCounter);
+        moveText.setText("number of moves: " + moveCount);
+
+        helpText = findViewById(R.id.help_text);
+
+        soundSwitch = findViewById(R.id.soundSwitch);
+        soundSwitch.setChecked(true);
+
+        moveSound = MediaPlayer.create(this, R.raw.move);
+        winSound = MediaPlayer.create(this, R.raw.win);
+        lostSound = MediaPlayer.create(this, R.raw.lost);
+        wrongMoveSound = MediaPlayer.create(this, R.raw.wrong);
+
+        timerText = findViewById(R.id.timer);
+        timerButton = findViewById(R.id.PausePlay);
+        timerButton.setText("Play");
+
+        timerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startStop();
+            }
+        });
+        updateTimer();
     }
+
 
     @SuppressLint("SetTextI18n")
     private void startGame(){
@@ -45,14 +96,13 @@ public class MainActivity extends AppCompatActivity {
         setLevelName("Level 1");
     }
 
-
     private void generateLevel(){
         // Generate what the game should look like
         game.addSquare(new PlayableSquare(Color.RED, Shape.DIAMOND), 0, 0);
         game.addSquare(new PlayableSquare(Color.BLUE, Shape.CROSS), 0, 1);
         game.addSquare(new PlayableSquare(Color.RED, Shape.CROSS), 0, 2);
         game.addSquare(new PlayableSquare(Color.GREEN, Shape.FLOWER), 1, 0);
-        game.addSquare(new BlankSquare(), 1, 1);
+        game.addSquare(new PlayableSquare(Color.PURPLE, Shape.BOLT), 1, 1);
         game.addSquare(new PlayableSquare(Color.YELLOW, Shape.STAR), 1, 2);
         game.addSquare(new PlayableSquare(Color.YELLOW, Shape.FLOWER), 2, 0);
         game.addSquare(new PlayableSquare(Color.YELLOW, Shape.CROSS), 2, 1);
@@ -83,47 +133,99 @@ public class MainActivity extends AppCompatActivity {
                 button.setTag(new int[]{row, col});
 
                 String imgName = setImages(row, col);
-                int resId = getResources().getIdentifier(imgName, "drawable", getPackageName());
-                button.setBackgroundResource(resId);
+                int img = getResources().getIdentifier(imgName, "drawable", getPackageName());
+                button.setBackgroundResource(img);
 
                 button.setOnClickListener(view -> {
                     int[] position = (int[]) view.getTag();
                     onClickHandle(position[0], position[1]);
                 });
 
-                frameLayout = new FrameLayout(this);
-                frameLayout.addView(button);
+                images = new FrameLayout(this);
+                images.addView(button);
 
                 addImagesToSquares(row,col);
-//                addGoalImg(row,col);
-
-                levelGrid.addView(frameLayout);
+                levelGrid.addView(images);
             }
         }
+    }
+
+    private void startStop() {
+        if(timerRunning){
+            stopTimer();
+        }else{
+            startTimer();
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    public void startTimer() {
+        timer = new CountDownTimer(timeLeft, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                timeLeft = millisUntilFinished;
+                updateTimer();
+            }
+
+            @Override
+            public void onFinish() {
+                gameLost();
+            }
+        }.start();
+
+        timerButton.setText("Pause");
+        timerRunning = true;
+    }
+
+    @SuppressLint("SetTextI18n")
+    public void stopTimer() {
+        timer.cancel();
+        timerButton.setText("Play");
+        timerRunning = false;
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void updateTimer(){
+        int min = (int) timeLeft / 60000;
+        int sec = (int) timeLeft % 60000 / 1000;
+
+        String timeLeftText = "" +min;
+        timeLeftText += ":";
+        if (sec < 10){
+            timeLeftText += 0;
+        }
+        timeLeftText += sec;
+        timerText.setText("Timer: " + timeLeftText);
+    }
+
+    @SuppressLint("SetTextI18n")
+    public void gameLost(){
+        helpText.setText("The timer ran out YOU WERE TOO SLOW");
+        lostSound.start();
+        onPause();
     }
 
     public String setImages(int row, int column) {
         ArrayList<Square> allMySquares = game.currentLevel.allMySquares;
-        String result = "";
         for (Square square : allMySquares) {
             if (row == square.getRow() && column == square.getCol()) {
                 String squareColor = square.color.toString();
                 String squareShape = square.shape.toString();
-                result = squareColor.toLowerCase() + "_" + squareShape.toLowerCase();
+                return squareColor.toLowerCase() + "_" + squareShape.toLowerCase();
             }
         }
-        return result;
+        return "";
     }
 
     private void addImagesToSquares(int row, int col){
         if (row == game.getEyeballRow() && col == game.getEyeballColumn()) {
-            ImageView playerImage = new ImageView(this);
-            playerImage.setTag("playerImage");
+            ImageView eyeball = new ImageView(this);
+            eyeball.setTag("eyeballImage");
 
-            int playerImageResId = getResources().getIdentifier("eyes_right", "drawable", getPackageName());
-            playerImage.setImageResource(playerImageResId);
+            int eyeballId = getResources().getIdentifier("eyes_right", "drawable", getPackageName());
+            eyeball.setImageResource(eyeballId);
 
-            frameLayout.addView(playerImage);
+            images.addView(eyeball);
         }
         if(game.hasGoalAt(row, col)){
             ImageView goalImage = new ImageView(this);
@@ -132,17 +234,17 @@ public class MainActivity extends AppCompatActivity {
             int goalImageResId = getResources().getIdentifier("goal", "drawable", getPackageName());
             goalImage.setImageResource(goalImageResId);
 
-            frameLayout.addView(goalImage);
+            images.addView(goalImage);
         }
     }
 
-
     private void setLevelName(String levelName){
-        TextView text = findViewById(R.id.LevelName);
-        text.setText(levelName);
+        TextView levelText = findViewById(R.id.LevelName);
+        levelText.setText(levelName);
     }
 
     public void restartClicked(View view) {
+        // check android version and run a different restart method
         if (Build.VERSION.SDK_INT >= 11) {
             recreate();
         } else {
@@ -158,35 +260,44 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("SetTextI18n")
     public void onClickHandle(int row, int col) {
-        TextView helpText = findViewById(R.id.help_text);
+        helpText = findViewById(R.id.help_text);
         goalCount = findViewById(R.id.goalCountText);
 
+        playSound = soundSwitch.isChecked();
+
         if (game.canMoveTo(row, col)) {
+            if(playSound) {
+                moveSound.start();
+            }
+            moveCounter();
             helpText.setText("");
             if (game.hasGoalAt(row, col)) {
+                if(playSound) {
+                    winSound.start();
+                }
                 game.completedGoal();
                 helpText.setText("You reached the Goal!!!!");
                 goalCount.setText("Number of goals complete:  " + (game.getCompletedGoalCount()) + "/" + (game.getGoalCount()));
             }
             game.moveTo(row, col);
-            eyeballImgRemove(row, col);
+            removeImg();
             DisplayEyeballImg(row, col, game.getEyeballDirection());
-
         } else {
-            game.checkDirectionMessage(row,col);
-            helpText.setText("Invalid Move: Eyeball can only move to the same Color or Shape, Eyeball can not move backwards or diagonally");
+            wrongMoveSound.start();
+            String message = game.checkDirectionMessage(row,col).toString();
+            helpText.setText(message);
         }
     }
 
-
-    private void eyeballImgRemove(int row, int col) {
+    private void removeImg() {
+        // Remove Eyeball image
         for (int i = 0; i < levelGrid.getChildCount(); i++) {
             View v = levelGrid.getChildAt(i);
             if (v instanceof FrameLayout) {
                 FrameLayout frameLayout = (FrameLayout) v;
                 for (int j = 0; j < frameLayout.getChildCount(); j++) {
                     View subView = frameLayout.getChildAt(j);
-                    if (subView.getTag() != null && subView.getTag().equals("playerImage")) {
+                    if (subView.getTag() != null && subView.getTag().equals("eyeballImage")) {
                         frameLayout.removeView(subView);
                         return;
                     }
@@ -197,18 +308,31 @@ public class MainActivity extends AppCompatActivity {
 
     private void DisplayEyeballImg(int row, int column, Direction direction) {
         FrameLayout frameLayout = (FrameLayout) levelGrid.getChildAt(row * levelGrid.getColumnCount() + column);
-        ImageView playerImage = new ImageView(this);
+        ImageView eyeball = new ImageView(this);
         String eyeballImage = "";
-        switch (direction) {
-            case UP -> eyeballImage = "eyes_up";
-            case DOWN -> eyeballImage = "eyes_down";
-            case LEFT -> eyeballImage = "eyes_left";
-            case RIGHT -> eyeballImage = "eyes_right";
+
+        if(direction == Direction.UP){
+            eyeballImage = "eyes_up";
+        }
+        else if (direction == Direction.DOWN){
+            eyeballImage = "eyes_down";
+        }
+        else if (direction == Direction.LEFT){
+            eyeballImage = "eyes_left";
+        }else {
+            eyeballImage = "eyes_right";
         }
 
         int playerImageResId = getResources().getIdentifier(eyeballImage, "drawable", getPackageName());
-        playerImage.setImageResource(playerImageResId);
-        playerImage.setTag("playerImage");
-        frameLayout.addView(playerImage);
+        eyeball.setImageResource(playerImageResId);
+        eyeball.setTag("eyeballImage");
+        frameLayout.addView(eyeball);
     }
+
+    @SuppressLint("SetTextI18n")
+    private void moveCounter(){
+        moveCount += 1;
+        moveText.setText("number of moves: " + moveCount);
+    }
+
 }
