@@ -8,7 +8,7 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
     protected int levelHeight;
     protected int levelCount = 0;
 
-    protected Level currentLevel;
+    public Level currentLevel;
     public ArrayList<Level> allMyLevels = new ArrayList<>();
 
 //    goal
@@ -231,8 +231,11 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
                     }
                 }
             }
+            if(MessageIfMovingTo(row, col) != Message.OK){
+                return Message.DIFFERENT_SHAPE_OR_COLOR;
+            }
+            return  Message.OK;
         }
-        return Message.OK;
     }
 
     public boolean canMoveTo(int row, int col){
