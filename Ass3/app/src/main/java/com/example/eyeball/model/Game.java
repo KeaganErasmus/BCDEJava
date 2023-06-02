@@ -8,7 +8,7 @@ public class Game implements ILevelHolder, IGoalHolder,ISquareHolder, IEyeballHo
     protected int levelHeight;
     protected int levelCount = 0;
 
-    protected Level currentLevel;
+    public Level currentLevel;
     public ArrayList<Level> allMyLevels = new ArrayList<>();
 
 //    goal
