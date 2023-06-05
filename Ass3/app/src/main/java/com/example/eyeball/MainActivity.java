@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.example.eyeball.model.Color;
 import com.example.eyeball.model.Direction;
 import com.example.eyeball.model.Game;
+import com.example.eyeball.model.Message;
 import com.example.eyeball.model.PlayableSquare;
 import com.example.eyeball.model.Shape;
 import com.example.eyeball.model.Square;
@@ -327,8 +328,18 @@ public class MainActivity extends AppCompatActivity {
             if(playSound) {
                 wrongMoveSound.start();
             }
-            String message = game.checkDirectionMessage(row,col).toString();
-            helpText.setText(message);
+            Message message = game.checkDirectionMessage(row,col);
+            switch (message){
+                case MOVING_DIAGONALLY -> {
+                    helpText.setText("You can not move diagonally");
+                }
+                case BACKWARDS_MOVE -> {
+                    helpText.setText("You can not move backwards");
+                }
+                case DIFFERENT_SHAPE_OR_COLOR -> {
+                    helpText.setText("You can only move to a square with the same shape or colour");
+                }
+            }
         }
     }
 
