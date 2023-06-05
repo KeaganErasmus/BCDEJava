@@ -2,6 +2,7 @@ package com.example.eyeball;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
@@ -24,7 +25,9 @@ import com.example.eyeball.model.PlayableSquare;
 import com.example.eyeball.model.Shape;
 import com.example.eyeball.model.Square;
 
+import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
     Game game = new Game();
@@ -51,6 +54,38 @@ public class MainActivity extends AppCompatActivity {
     long timeLeft;
     boolean timerRunning;
     Button timerButton;
+
+    HashMap<String, Integer> resourceMap = new HashMap<>(){
+        {
+            put("blue_cross", R.drawable.blue_cross);
+            put("blue_diamond", R.drawable.blue_diamond);
+            put("blue_flower", R.drawable.blue_flower);
+            put("blue_star", R.drawable.blue_star);
+
+            put("red_cross", R.drawable.red_cross);
+            put("red_diamond", R.drawable.red_diamond);
+            put("red_flower", R.drawable.red_flower);
+            put("red_star", R.drawable.red_star);
+
+            put("green_cross", R.drawable.green_cross);
+            put("green_diamond", R.drawable.green_diamond);
+            put("green_flower", R.drawable.green_flower);
+            put("green_star", R.drawable.green_star);
+
+            put("yellow_cross", R.drawable.yellow_cross);
+            put("yellow_diamond", R.drawable.yellow_diamond);
+            put("yellow_flower", R.drawable.yellow_flower);
+            put("yellow_star", R.drawable.yellow_star);
+
+            put("purple_bolt", R.drawable.purple_bolt);
+
+            put("goal", R.drawable.goal);
+
+            put("eyes_down", R.drawable.eyes_down);
+            put("eyes_left", R.drawable.eyes_left);
+            put("eyes_right", R.drawable.eyes_right);
+            put("eyes_up", R.drawable.eyes_up);
+        }};
 
     @SuppressLint("SetTextI18n")
     @Override
@@ -117,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
 
     @SuppressLint("DefaultLocale")
     private void createLevel(){
-        game.addLevel(4,4);
+        game.addLevel(4,3);
         int levelHeight = game.currentLevel.height;
         int levelWidth = game.currentLevel.width;
         levelGrid = findViewById(R.id.LevelGrid);
@@ -133,8 +168,11 @@ public class MainActivity extends AppCompatActivity {
                 button.setTag(new int[]{row, col});
 
                 String imgName = setImages(row, col);
-                int img = getResources().getIdentifier(imgName, "drawable", getPackageName());
-                button.setBackgroundResource(img);
+                if (resourceMap.containsKey(setImages(row, col))) {
+                    // Get the resource ID from the map
+                    int resourceId = resourceMap.get(imgName);
+                    button.setBackgroundResource(resourceId);
+                }
 
                 button.setOnClickListener(view -> {
                     int[] position = (int[]) view.getTag();
@@ -227,7 +265,7 @@ public class MainActivity extends AppCompatActivity {
             ImageView eyeball = new ImageView(this);
             eyeball.setTag("eyeballImage");
 
-            int eyeballId = getResources().getIdentifier("eyes_right", "drawable", getPackageName());
+            int eyeballId = resourceMap.get("eyes_right");
             eyeball.setImageResource(eyeballId);
 
             images.addView(eyeball);
@@ -236,7 +274,7 @@ public class MainActivity extends AppCompatActivity {
             ImageView goalImage = new ImageView(this);
             goalImage.setTag("goalImage" + row + "_" + col);
 
-            int goalImageResId = getResources().getIdentifier("goal", "drawable", getPackageName());
+            int goalImageResId = resourceMap.get("goal");
             goalImage.setImageResource(goalImageResId);
 
             images.addView(goalImage);
@@ -289,7 +327,9 @@ public class MainActivity extends AppCompatActivity {
             removeImg();
             DisplayEyeballImg(row, col, game.getEyeballDirection());
         } else {
-            wrongMoveSound.start();
+            if(playSound) {
+                wrongMoveSound.start();
+            }
             String message = game.checkDirectionMessage(row,col).toString();
             helpText.setText(message);
         }
@@ -329,7 +369,7 @@ public class MainActivity extends AppCompatActivity {
             eyeballImage = "eyes_right";
         }
 
-        int playerImageResId = getResources().getIdentifier(eyeballImage, "drawable", getPackageName());
+        int playerImageResId = resourceMap.get(eyeballImage);
         eyeball.setImageResource(playerImageResId);
         eyeball.setTag("eyeballImage");
         frameLayout.addView(eyeball);
