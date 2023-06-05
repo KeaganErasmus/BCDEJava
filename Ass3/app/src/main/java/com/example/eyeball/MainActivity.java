@@ -2,7 +2,6 @@ package com.example.eyeball;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.graphics.drawable.Drawable;
 import android.media.MediaPlayer;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.widget.GridLayout;
 import android.widget.ImageView;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,7 +23,6 @@ import com.example.eyeball.model.PlayableSquare;
 import com.example.eyeball.model.Shape;
 import com.example.eyeball.model.Square;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -325,7 +322,7 @@ public class MainActivity extends AppCompatActivity {
             }
             game.moveTo(row, col);
             removeImg();
-            DisplayEyeballImg(row, col, game.getEyeballDirection());
+            displayEyeballImg(row, col, game.getEyeballDirection());
         } else {
             if(playSound) {
                 wrongMoveSound.start();
@@ -352,7 +349,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private void DisplayEyeballImg(int row, int column, Direction direction) {
+    private void displayEyeballImg(int row, int column, Direction direction) {
         FrameLayout frameLayout = (FrameLayout) levelGrid.getChildAt(row * levelGrid.getColumnCount() + column);
         ImageView eyeball = new ImageView(this);
         String eyeballImage = "";
